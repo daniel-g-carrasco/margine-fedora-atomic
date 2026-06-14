@@ -84,6 +84,11 @@ F = Forge).
 | `SUPER+W` | `close` |
 | `SUPER+F` | `toggle-fullscreen` |
 | `SUPER+O` | `always-on-top` |
+| `SUPER+M` | `minimize` |
+
+> `minimize` lives on `SUPER+M` because GNOME's default `<Super>h` is claimed
+> by o-tiling `focus-left` (Hyprland parity) and `<Super>Down` is `unmaximize`,
+> not minimize — there is no "auto-minimize" action in GNOME or o-tiling.
 
 ### Tiling actions (T — require o-tiling extension)
 

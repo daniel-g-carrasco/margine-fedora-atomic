@@ -901,6 +901,10 @@ gnome:
       close:              '<Super>w'
       toggle_fullscreen:  '<Super>f'
       always_on_top:      '<Super>o'
+      # GNOME's default minimize chord <Super>h is taken by o-tiling
+      # focus-left, and <Super>Down is unmaximize (not minimize), so the
+      # minimize action moves to a free chord.
+      minimize:           '<Super>m'
     shell:
       toggle_application_view: ['<Super>r']
       toggle_overview:    '<Super><Shift>space'
