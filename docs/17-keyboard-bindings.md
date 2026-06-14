@@ -45,7 +45,7 @@ native bindings instead of replacing them with a custom extension.
 
 The full set, grouped by purpose. Source: `60-binds.conf`. Destination
 schema in the legend column (W = WM, S = Shell, M = media-keys, C = custom,
-F = Forge).
+T = o-tiling).
 
 ### Launcher / overview
 
@@ -170,7 +170,7 @@ not mapped:
 | `SUPER+K` (show Hyprland binds) | GNOME Settings → Keyboard has the canonical list |
 | `SUPER SHIFT+P` (restart waybar) | no waybar in GNOME |
 | `SUPER+P` (pseudotile) | Hyprland-specific layout concept; closest o-tiling has is per-window float, on `SUPER+SHIFT+F` |
-| `SUPER+S` / `SUPER ALT+S` (scratchpad) | Forge has no built-in scratchpad workspace; workaround would be a dedicated workspace + custom keybinding, but it's out of scope here |
+| `SUPER+S` / `SUPER ALT+S` (scratchpad) | o-tiling has no built-in scratchpad workspace, and `SUPER+S` is reserved for GNOME quick-settings; a workaround would be a dedicated workspace + custom keybinding, but it's out of scope here |
 
 ## How to apply
 
@@ -181,10 +181,10 @@ scripts/configure-gnome-keybindings
 # Apply
 scripts/configure-gnome-keybindings --apply
 
-# After --apply, enable Forge so its schema becomes available, then re-run
-# so the Forge keybinding section actually takes effect:
-gnome-extensions enable forge@jmmaranan.com
-scripts/configure-gnome-keybindings --apply
+# o-tiling is installed system-wide by margine-image and enabled by default
+# via the zz1 gschema override, so its keybinding section applies on first
+# login with no manual enable step. (If you disabled it, re-enable with
+# `scripts/configure-gnome-extensions --apply`, then re-run this script.)
 
 # Log out / log back in for some shell-side shortcuts (toggle-overview, etc.)
 # to refresh.
@@ -205,7 +205,7 @@ gsettings get org.gnome.desktop.wm.keybindings switch-to-workspace-1   # ['<Supe
 gsettings get org.gnome.desktop.wm.keybindings close                   # ['<Super>w']
 gsettings get org.gnome.shell.keybindings toggle-application-view      # ['<Super>space', '<Super>r']
 gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings
-gsettings get org.gnome.shell.extensions.forge.keybindings window-toggle-float
+gsettings get org.gnome.shell.extensions.o-tiling toggle-floating
 gsettings get org.gnome.mutter dynamic-workspaces                      # true
 gsettings get org.gnome.desktop.wm.preferences workspace-names          # ['1', ...]
 gsettings get org.gnome.desktop.wm.keybindings switch-to-workspace-4    # ['<Super>4']
@@ -230,30 +230,31 @@ To add a new app launcher, append an entry to `gnome.keybindings.custom`:
   command: 'my-command --with-args'
 ```
 
-To swap a Forge tiling key, change the value in `gnome.keybindings.forge` —
-Forge's gsettings schema accepts any GNOME-format accelerator.
+To swap a tiling key, change the value in `gnome.keybindings.o_tiling` (keep
+it in sync with margine-image's dconf `03-margine-o-tiling`, which sets the
+same keys as system defaults) — o-tiling's schema accepts any GNOME-format
+accelerator.
 
-## Forge: enabling and notes
+## o-tiling: enabling and notes
 
-Forge is shipped as `gnome-shell-extension-forge` in the host baseline
-(installed by `scripts/apply-host-layer --apply`). It is **not enabled
-automatically** — GNOME extensions are user-state, not host-state.
+o-tiling is installed **system-wide** by margine-image
+(`build_files/build-margine-extensions.sh` bakes a pinned, checksummed
+release into `/usr/share/gnome-shell/extensions/`) and is enabled by default
+through the `enabled-extensions` list in the zz1 gschema override. It is
+active on first GDM login — no per-user install, no manual enable step.
 
-After first boot:
+If you ever disable it and want it back:
 
 ```sh
 scripts/configure-gnome-extensions --apply
-gnome-extensions list --enabled | grep -E 'forge|workspace-indicator'
+gnome-extensions list --enabled | grep -E 'o-tiling|workspace-indicator'
 ```
 
-Then re-run `configure-gnome-keybindings --apply` (the Forge schema becomes
-available only after the extension is enabled).
-
-Forge has its own preferences window (`gnome-extensions prefs
-forge@jmmaranan.com`) for things outside the keybinding scope: window
-gaps, tiling mode (tabbed / stacked / split), drag-to-tile behaviour. The
-Margine declarations don't pre-configure those — pick what you like from
-the Forge GUI and they persist in user dconf.
+o-tiling has its own preferences window (`gnome-extensions prefs
+o-tiling@oliwebd.github.com`) for things outside the keybinding scope: gaps,
+the active-window hint, auto-split behaviour. Margine pre-seeds a few of
+these via the dconf `03-margine-o-tiling` keyfile; anything you change in the
+GUI persists in your user dconf.
 
 ## Source preserved
 
