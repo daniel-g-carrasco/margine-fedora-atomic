@@ -1,3 +1,5 @@
+> **Moved:** report security issues at https://github.com/daniel-g-carrasco/margine-image/security/advisories/new
+
 # Security Policy
 
 This repository holds the declarative spec, configuration helpers, and

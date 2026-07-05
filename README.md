@@ -1,3 +1,11 @@
+> [!IMPORTANT]
+> **This repository has moved.** Its contents (spec scripts, declarations,
+> branding assets, ADRs and the handbook) now live inside
+> [daniel-g-carrasco/margine-image](https://github.com/daniel-g-carrasco/margine-image),
+> so Margine is a single repo. This repo is archived and read-only. Existing
+> deep links keep working here; new work happens in margine-image.
+> Report issues at https://github.com/daniel-g-carrasco/margine-image/issues/new/choose
+
 <div align="center">
 
 <img src="assets/branding/margine-logo-wide.png" alt="Margine" width="420">
